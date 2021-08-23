@@ -1,0 +1,10 @@
+<title>Movie Encyclopedia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.2/css/bootstrap.min.css"/>
+</head>
+<body>
+    <div class="container mt-3 text-center">
+        <h1 class="text-center mt-5">Movie Encyclopedia</h1>
+    </div>
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</html>
