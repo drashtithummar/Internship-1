@@ -1,109 +1,104 @@
-$(document).ready(function() {
-
-    function highlight(word, query) {
-        let check = new RegExp(query, "ig")
-        return word.toString().replace(check, function(matchedText) {
-            return "<u style='background-color: yellow'>" + matchedText + "</u>"
-        })
+const quizDB = [
+    {
+      question: 'What is 2 + 2?',
+      a: "1",
+      b: "4",
+      c: "34",
+      d: "40",
+      ans: "ans2"
+        
+    },
+    {
+      question: 'Who is the best player?',
+      a: "virat kohli",
+      b: "kane williamson",
+      c: "hardik pandya",
+      d: "rohit sharma",
+      ans: "ans1"
+    },
+    {
+      question: 'Is web development fun?',
+      a: "kinda",
+      b: "yes",
+      c: "no",
+      d: "idk",
+      ans: "ans2"
+    },
+    {
+      question: 'What is 4 * 2?',
+      a: "1",
+      b: "4",
+      c: "6",
+      d: "8",
+      ans: "ans4"
     }
+  ];
 
-    $("#result-list").hide()
-    $("#list").hide()
+  const question = document.querySelector('.question');
+  const option1 = document.querySelector('#option1');
+  const option2 = document.querySelector('#option2');
+  const option3 = document.querySelector('#option3');
+  const option4 = document.querySelector('#option4');
+  const submit = document.querySelector('#submit');
 
-    $(".search-input").keyup(function() {
-        let search = $(this).val()
-        let results = ""
-        if (search == "") {
-            $("#result-list").hide()
-            $(".search-input").removeClass("arrow").addClass("search")
-        } else {
-            $(".search-input").removeClass("search").addClass("arrow")
-        }
+  const answers = document.querySelectorAll('.answer');
 
-        $.getJSON("https://www.omdbapi.com/?", { apikey: "fd161998", s: search }, function(data) {
-            if (data.Search !== undefined) {
-                $.each(data.Search, function(index, value) {
-                    if (index < 2) {
-                        $.getJSON("https://www.omdbapi.com/?", { apikey: "fd161998", i: value.imdbID }, function(movieData) {
-                            if (movieData) {
-                                results += '<div class="result row p-1">'
-                                results += '<div class="col-sm-5"><img src=' + movieData.Poster + ' style="width: 170px; height: 250px;" /></div>'
-                                results += '<div class="col-sm-7 text-left">'
-                                results += '<div class="movie-title">'+ highlight(movieData.Title, $(".search-input").val()) +' ('+ movieData.Year +')</div>'
-                                results += '<div class="rating-div"><span class="h4 rating">'+ movieData.imdbRating +'</span>/10</div>'
-                                results += '<div class="my-3">'
-                                results += '<div>Language: '+ movieData.Language + '</div>'
-                                results += '<div>Stars: '+ movieData.Actors.split(",").slice(0, 3) + ' | <a href="#">Show All »</a></div>'
-                                results += '</div>'
-                                results += '<div class="my-3">'
-                                results += '<div>'+ movieData.Plot.slice(0, 100) + '... <a href="#">Details »</a></div>'
-                                results += '</div>'
-                                results += '</div>'
-                                results += "</div>"
-                                $("#results").html(results)
-                                
-                                if (/Mobi|Android/i.test(navigator.userAgent)) {
-                                    $("#results").children(".result").eq(1).hide();
-                                } else {
-                                    $(".result").first().after("<hr>")
-                                }
-                            }
-                        })
-                    }
-                });
-                $("#result-list").show()
-            }
-        });
-    });
-    
-    $("#show-more").click(function(e) {
-        e.preventDefault()
-        var search = $(".search-input").val()
-        let listResults = ""
-        $("#search").hide()
-        $("#list").show()
-        $("#search-term").html("Results for: " + search)
-        $.getJSON("https://www.omdbapi.com/?", { apikey: "fd161998", s: search }, function(listData) {
-            if (/Mobi|Android/i.test(navigator.userAgent)) {
-                $("#list-count").html("(" + listData.totalResults + ")")
-            } else {
-                $("#list-count").html(listData.totalResults + " movie found")
-            }
-            if (listData.Search !== undefined) {
-                $.each(listData.Search, function(index, value) {
-                    $.getJSON("https://www.omdbapi.com/?", { apikey: "fd161998", i: value.imdbID }, function(listMovieData) {
-                        if (listMovieData) {
-                            listResults += '<div class="list-result col-6 p-3">'
-                            listResults += '<div class="row">'
-                            listResults += '<div class="col-md-6"><img src="' + listMovieData.Poster + '" style="width: 100%;" /></div>'
-                            listResults += '<div class="col-md-6 text-left">'
-                            listResults += '<div class="movie-title">'+ highlight(listMovieData.Title, $(".search-input").val()) +' ('+ listMovieData.Year +')</div>'
-                            listResults += '<div class="rating-div"><span class="h4 rating">'+ listMovieData.imdbRating +'</span>/10</div>'
-                            listResults += '<div class="my-3">'
-                            listResults += '<div>Language: '+ listMovieData.Language + '</div>'
-                            listResults += '<div>Stars: '+ listMovieData.Actors.split(",").slice(0, 3) + ' | <a href="#">Show All »</a></div>'
-                            listResults += '</div>'
-                            listResults += '<div class="my-3">'
-                            listResults += '<div>'+ listMovieData.Plot.slice(0, 100) + '... <a href="#">Details »</a></div>'
-                            listResults += '</div>'
-                            listResults += '</div>' // col-6 end
-                            listResults += "</div>" // row end
-                            listResults += "</div>" // list-result col-6 end
-                            $("#list-results").html(listResults)
-                            $(".list-result:odd:not(:last-child)").after("<div class='col-12'><hr></div>")
-                        }
-                    })
-                });
-            }
-        });
-    });
+  const showScore = document.querySelector('#showScore');
 
-    $("#searchAgain").click(function() {
-        $("#search").show()
-        $("#list").hide()
-        $("#result-list").hide()
-        $(".search-input").val("")
-    });
-});
- 
+let questionCount = 0;
+let score = 0;
+
+const loadQuestion= () => {
+
+    const questionList = quizDB[questionCount];
+    question.innerText = questionList.question;
+    option1.innerText = questionList.a;
+    option2.innerText = questionList.b;
+    option3.innerText = questionList.c;
+    option4.innerText = questionList.d;
+
+
+}
+
+  loadQuestion();
+
+  const getCheckAnswer = () => {
+      let answer;
+
+      answers.forEach((curAnsElem) => {
+          if(curAnsElem.checked){
+              answer=curAnsElem.id;
+          }
+          
+      });
+      return answer;
+  };
+
+  const deselectAll = () => {
+      answers.forEach((curAnsElem) => curAnsElem.checked = false) ;
+  }
+
+  submit.addEventListener('click', () => {
+      const checkedAnswer = getCheckAnswer();
+      console.log(checkedAnswer);
+
+      if(checkedAnswer === quizDB[questionCount].ans){
+          score++;
+      };
+
+      questionCount++;
+     
+      deselectAll();
+     
+      if(questionCount < quizDB.length){
+          loadQuestion();
+      }else{
+        showScore.innerHTML = `
+          <h3> You scored ${score}/${quizDB.length} </h3>
+          <button class = ""btn onclick="location.reload()"> Play Again </button>
+        
+        `;
+        showScore.classList.remove('scoreArea');
+      }
+  });
 

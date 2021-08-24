@@ -1,73 +1,91 @@
-html, body { 
-    background-color: #F7F9FD;
-}
-.border-padding {
-    border: 1px solid #F1EEF2;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
-    padding: 20px;
-}
-.search-input {
-    width: 100%;
-    height: 55px;
-    padding-right: 60px;
+  @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400&display=swap');
+  *{
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Josefin Sans",sans-serif;
+      font-weight: 300;
+  }
+
+  html{
+      font-size: 62.5%;
+  }
+
+  .main-div{
+      width: 100vw;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      background-color: azure;
+
+  }
+
+  .inner-div{
+      width: 40vw;
+      background-color: rgb(222, 226, 226);
+      padding: 3rem 8rem;
+      border-radius: 1rem;
+      box-shadow: 0 1rem 1rem --0.7rem darkslategray(0, 0, 0, 0.4);
+  }
+
+ .inner-div h2{
+      font-size: 3.5rem;
+      font-weight: 400;
+      margin-top: 1rem 0 4rem 0;
+} 
+
+.inner-div li{
+    font-size: 2rem;
+    margin-top: 1.5rem;
+    list-style: none;
+} 
+
+input{
+    cursor: pointer;
 }
 
-.search {
-    background: url(search.png) no-repeat center right 20px #fff;
+#submit, .btn{
+     padding: 1rem 3rem;
+     outline: none;
+     font-size: 2rem ;
+     font-size: 400;
+     display: block;
+     margin: auto;
+     border: none;
+     text-transform: uppercase;
+     color: #fff;
+     background-color: #74b9ff;
+     margin-top: 4rem;
+     cursor: pointer;
 }
 
-.arrow {
-    background: url(arrow.png) no-repeat center right 20px #fff;
+#submit:hover{
+    background-color: #0984e3;
 }
 
-#result-list {
-    background: #fff;
-    position: relative;
-    top: 12px;
+#ShowScore{
+    background-color: #dfe6e9;
+    margin-top: 3rem;
+    padding: 3rem 4rem;
+    box-shadow: 0 1rem 1rem --0.7rem darkslategray(0, 0, 0, 0.4);  
 }
 
-#result-footer {
-  border-top: 2px solid #F1EEF2;
-  margin: auto -20px;
+#ShowScore h3{
+          font-size: 5rem;
+          text-align: center;
 }
 
-#result-list:after, 
-#result-list:before {
-    bottom: 100%;
-    border: solid transparent;
-    content: " ";
-    height: 0;
-    width: 0;
-    position: absolute;
-    pointer-events: none;
+#ShowScore .btn{
+    margin-top: 3rem;
+    border-color: #55efc4;
+    color: #2d3436;
 }
 
-#result-list:after {
-    border-color: rgba(255, 255, 255, 0);
-    border-bottom-color: #ffffff;
-    border-width: 19px;
-    left: 20%;
-    margin-left: -19px;
-}
-#result-list:before {
-    border-color: rgba(113, 158, 206, 0);
-    border-bottom-color: #F1EEF2;
-    border-width: 20px;
-    left: 20%;
-    margin-left: -20px;
+#ShowScore .btn:hover{
+    border-color: #00b894;
+    color: #fff;
 }
 
-.list-header {
-    border-bottom: 1px solid #5883FF;
-    color: #5883FF;
-}
-.rating-div {
-    color: #9B9B9B;
-
-}
-
-.movie-title {
-    font-size: 1.2rem;
+.scoreArea{
+    display: none;
 }
